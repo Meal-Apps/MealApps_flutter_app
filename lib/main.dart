@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:mill_info/widget/demo.dart';
+import 'package:get/get.dart';
+import 'package:mill_info/core/utilis/balance-controller.dart';
+import 'package:mill_info/core/utilis/controler.dart';
+import 'package:mill_info/screen/home_screen.dart';
 import 'package:shared_value/shared_value.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:mill_info/screen/login_screen.dart';
-import 'firebase_options.dart';
 
 // ...
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(SharedValue.wrapApp( const MyApp()));
 }
-
-class MyApp extends StatelessWidget {
- const  MyApp({super.key});
-  // This widget is the root of your application.
+class Loading extends StatelessWidget{
+  const Loading({super.key});
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
+    return  const Scaffold(
+      body: Center(child: CircularProgressIndicator(),),
+    );
+  }
+
+}
+class MyApp extends StatelessWidget {
+ const  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+   var data = Get.put(AllDataController());
+   var balance=Get.put(BalanceController());
+   var expenses = Get.put(ExpensesController());
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -26,7 +36,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:Tem(),
+      home: Obx((){
+        if(data.isLoading.value && balance.isLoading.value&&expenses.isLoading.value){
+          return const Loading();
+        }else{
+          return const HomeScreen();
+        }
+      })
 
     );
   }

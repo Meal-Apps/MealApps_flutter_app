@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mill_info/api/model_class/for_manager/manager-all-info.dart';
+import 'package:mill_info/core/utilis/balance-controller.dart';
+import 'package:mill_info/core/utilis/controler.dart';
 import 'package:mill_info/screen/home_screen.dart';
 import 'package:mill_info/core/shared_value.dart';
 
@@ -11,97 +15,77 @@ class BalanceScreen extends StatefulWidget {
 }
 
 class _BalanceScreenState extends State<BalanceScreen> {
+  bool isPreviousMonth = false;
+  List<dynamic> balances = AllDataController.managerAllInfo!.balance;
+  dynamic totalBalance = AllDataController.managerAllInfo!.totalBalance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text("View Balance"),
+        actions: [
+          isPreviousMonth
+              ? TextButton(
+                  onPressed: () {
+                    isPreviousMonth = false;
+                    balances = AllDataController.managerAllInfo!.balance;
+                    totalBalance = AllDataController.managerAllInfo!.totalBalance;
+                    setState(() {});
+                  },
+                  child: const Text("Current month"))
+              : TextButton(
+                  onPressed: () {
+                    isPreviousMonth = true;
+                    balances = BalanceController.balance!.balances;
+                    totalBalance = BalanceController.balance!.totalBalance;
+                    setState(() {});
+                  },
+                  child: const Text("Previous month")),
+        ],
       ),
-      body: Container(
-        child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection('millNames').doc(millId.$).collection('balance').orderBy('dateTime',descending: true).snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator()); // Display a loading indicator while waiting for data
-              } else if (snapshot.hasError) {
-                return const Center(child:Text("error")); // Handle errors
-              } else if (!snapshot.hasData) {
-                return const Center(child: Text("data nai"),); // Handle the case when there's no data
-              }
-              return SizedBox(
-                height: MediaQuery.sizeOf(context).height*0.80,
-                child: ListView(
-                    children: snapshot.data!.docs
-                        .map((DocumentSnapshot document) {
-                      return  Container(
-                        decoration: const BoxDecoration(border: Border(bottom: BorderSide())),
-                        padding: const EdgeInsets.all(5.0),
-                        child: ListTile(
-                          leading: Text(document['time'],style: const TextStyle(fontSize: 14
-                          ),),
-                          title:Text(document['details'],textAlign: TextAlign.center,style: const TextStyle(fontSize: 14
-                          ),),
-                          trailing : Text(" ${document['balance']} TK",style: const TextStyle(fontSize: 14
-                          ),),
-
-                        ),
-                      );
-
-                    }).toList()
-                ),
-              );
-
-            }
-        ),
-      ),
+      body: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.80,
+          child: ListView.builder(
+              itemCount: balances.length,
+              itemBuilder: (context, index) {
+                var balance = balances[index];
+                return Container(
+                  decoration:
+                      const BoxDecoration(border: Border(bottom: BorderSide())),
+                  padding: const EdgeInsets.all(5.0),
+                  child: ListTile(
+                    leading: Text(
+                      DateFormat.yMEd().format(balance.createdAt),
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    title: Text(
+                      balance.userName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    trailing: Text(
+                      " ${balance.balance} TK",
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
+                );
+              })),
       bottomSheet: Container(
         color: Colors.lightGreenAccent,
         height: 60,
-        padding:EdgeInsets.all(10),
-        child:  setAmount(),
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Text("Total Amount",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            Text("$totalBalance TK",
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
-  }
-  setAmount(){
-    return  FutureBuilder(
-      future:FirebaseFirestore.instance.collection('millNames').doc(millId.$).collection('balance').get(),
-      builder: (ctx, snapshot) {
-        // Checking if future is resolved or not
-        if (snapshot.connectionState == ConnectionState.done) {
-          // If we got an error
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                '${snapshot.error} occurred',
-                style: TextStyle(fontSize: 18),
-              ),
-            );
-
-            // if we got our data
-          } else if (snapshot.hasData) {
-            // Extracting data from snapshot object
-          var  balance = snapshot.data!.docs.map((e) => int.parse(e.data()['balance'])).toList();
-            return  Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Text("Total Amount",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
-                Text("${getSum(balance)} TK",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
-
-              ],
-            );
-          }
-        }
-
-        // Displaying LoadingSpinner to indicate waiting state
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-
-      // Future that needs to be resolved
-      // inorder to display something on the Canvas
-    );
-
   }
 }
