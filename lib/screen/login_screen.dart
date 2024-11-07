@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mill_info/screen/create_mill_screen.dart';
-import 'package:mill_info/screen/get_user_information.dart';
+import 'package:get/get_common/get_reset.dart';
+import 'package:mill_info/api/endpoints.dart';
+import 'package:mill_info/api/services/login-service.dart';
 import 'package:mill_info/core/shared_value.dart';
 import 'package:mill_info/screen/singup_screen.dart';
-
 import 'home_screen.dart';
+
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({super.key});
@@ -24,7 +22,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserInformation(context);
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(),
@@ -36,8 +33,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Login our millInfo",
+              const Text(
+                "Login our MealApp",
                 style: TextStyle(fontSize: 17, height: 10),
               ),
               // Email field
@@ -49,12 +46,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   }
                   return null;
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
 
@@ -76,31 +73,51 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    FirebaseAuth auth = FirebaseAuth.instance;
-                    await auth
-                        .signInWithEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passwordController.text)
-                        .then((value) {
-                      userId.$ = value.user!.uid;
-                      userId.load();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MillScreen(id: value.user!.uid)));
-                    }).catchError((error) {
-                      Fluttertoast.showToast(msg: "$error");
-                    });
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await LoginApiService().login(_emailController.text, _passwordController.text, endpoint: getUserLogin).then(
+                                (value){
+                              token.$=value['access_token'];
+                              token.load();
+                              print("this is token : ${token.$}");
+                              Fluttertoast.showToast( msg:"${value['message']}");
+                              print("${value['message']}");
 
-                    print("isclicked");
-                  }
-                },
-                child: Text('Login'),
-              ),
+                            }).catchError((e){
+                              print(e);
+                          Fluttertoast.showToast( msg:"$e");
+                        });
+                        print("isclicked");
+                      }
+                    },
+                    child: const Text('Login as user'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await LoginApiService().login(_emailController.text, _passwordController.text, endpoint: getManagerLogin).then(
+                                (value){
+                              token.$=value['access_token'];
+                              isManager.$=true;
+                              isManager.load();
+                              token.load();
+                              print("this is token : ${token.$}");
+                              Fluttertoast.showToast( msg:"${value['message']}");
+                            }).catchError((e){
+                          Fluttertoast.showToast( msg:"$e");
+                        });
+                        print("isclicked");
+                      }
+                    },
+                    child: const Text('Login as manager'),
+                  ),
+                ],
+              )
+             ,
 
               // Switch between login and signup modes
               TextButton(
@@ -113,7 +130,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             builder: (context) => SignupScreen()));
                   });
                 },
-                child: const Text('Signup'),
+                child: const Text('Create Manager'),
               )
 
               // ... other form fields as needed

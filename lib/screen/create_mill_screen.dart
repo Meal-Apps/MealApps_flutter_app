@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:mill_info/screen/get_user_information.dart';
 import 'package:mill_info/core/utilis/screen_size.dart';
 class MillScreen extends StatelessWidget {
 
@@ -98,7 +97,7 @@ class MillScreen extends StatelessWidget {
                       children: [
                         TextButton(
                             onPressed: () {
-                            UserInformation(context);
+                            // UserInformation(context);
 
 
                             },
@@ -113,7 +112,7 @@ class MillScreen extends StatelessWidget {
                                   'millBoder': borderNames,
                                   'millManager': _managerController.text,
                                 });
-                              UserInformation(context);
+                              // UserInformation(context);
 
                               } else {
                                 if (kDebugMode) {

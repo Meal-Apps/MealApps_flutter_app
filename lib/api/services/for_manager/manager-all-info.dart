@@ -2,13 +2,14 @@
 import 'package:mill_info/api/endpoints.dart';
 import 'package:mill_info/api/model_class/for_manager/manager-all-info.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../core/shared_value.dart';
 class ApiData {
   Future<ManagerAllInfo> getManagerInfo() async {
-    const token = "32|Crb2woaH0sDAKLdDmVMIQeNcHHpnxg1ph2g7uBpA5138633a";
     final response = await http.get(
         Uri.parse("https://mealapi.devrefat.com/api/$get_managers"),
         headers: {
-          'Authorization': 'Bearer $token'
+          'Authorization': 'Bearer ${token.$}'
         }
     );
     if (response.statusCode == 200) {

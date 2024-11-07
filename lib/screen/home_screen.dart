@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:mill_info/core/utilis/controler.dart';
-import 'package:mill_info/core/utilis/screen_size.dart';
 import 'package:mill_info/screen/balance_screen.dart';
 import 'package:mill_info/screen/input_screen.dart';
 import 'package:mill_info/screen/login_screen.dart';
@@ -35,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(
                       builder: (context) => const BalanceScreen())),
               child: const Text("Balance")),
-          if (userCategory.$ == "millManager")
+          if (isManager.$)
             IconButton(
                 onPressed: () => Navigator.push(
                       context,
@@ -49,8 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
           //user
           TextButton.icon(
             onPressed: () {
-              userId.$ = "";
-              userId.load();
 
               Navigator.push(
                   context,
@@ -69,8 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
           //manager
           TextButton.icon(
             onPressed: () {
-              userId.$ = "";
-              userId.load();
 
               Navigator.push(
                 context,
@@ -89,8 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
           // previous month expenses
           TextButton.icon(
             onPressed: () {
-              userId.$ = "";
-              userId.load();
 
               Navigator.push(
                   context,
@@ -109,8 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
           //logout
           TextButton.icon(
             onPressed: () {
-              userId.$ = "";
-              userId.load();
+              token.$ ="";
+              token.load();
 
               Navigator.pushAndRemoveUntil(
                   context,
@@ -129,12 +120,40 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body:getExpenses(context, AllDataController.managerAllInfo!.expenses),
-      bottomSheet: Container(
+      body:getExpenses(context, AllDataController.managerAllInfo?.expenses),
+      bottomSheet:Container(
         color: Colors.lightGreenAccent,
         height: 60,
         padding: const EdgeInsets.all(10),
-        child: getTotalExpensesAndBalance(context, AllDataController.managerAllInfo),
+        child: Column(
+          children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("Total Amount",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                Text("Expenses Amount",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                Text("Reserve Amount",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("${AllDataController.managerAllInfo!.totalBalance} TK",
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold)),
+                Text(" ${AllDataController.managerAllInfo?.totalExpenses}TK",
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold)),
+                Text("${AllDataController.managerAllInfo!.currentBalance} TK",
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
