@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mill_info/api/services/for_manager/registration.dart';
 import 'package:mill_info/screen/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -17,7 +17,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  final _mealNameController=TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -29,9 +30,8 @@ class _SignupScreenState extends State<SignupScreen> {
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(" Our Mill",style: TextStyle(fontSize: 18,height: 10),),
+              const Text("Create Manager",style: TextStyle(fontSize: 18,height: 10),),
               // Name field
               TextFormField(
                 controller: _nameController,
@@ -64,6 +64,24 @@ class _SignupScreenState extends State<SignupScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
+              const SizedBox(height: 10,),
+
+
+
+              // meal name field
+              TextFormField(
+                controller: _mealNameController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your Meal name';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Meal Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
 
               const SizedBox(height: 10,),
 
@@ -85,42 +103,35 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 10,),
 
               // Signup button
-              ElevatedButton(
+              isLoading?const CircularProgressIndicator():ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    var user = FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-                 //    FirebaseAuth auth = FirebaseAuth.instance;
-                 // await   auth.createUserWithEmailAndPassword(
-                 //            email: _emailController.text,
-                 //            password: _passwordController.text)
-                    if (kDebugMode) {
-                      print("users data type :  ${user.runtimeType}");
-                    }
-                        user.then((value) {
-                      // isLoading=false;
-                      if (kDebugMode) {
-                        print("this is print value : ${value.user!.uid}");
-                      }
-                      addUserData(value.user!.uid);
-                      // toastMessage('Sing up success');
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginSignupScreen()),
-                          (route) => false);
-                      // setState(() {});
-                    }).catchError((error) {
-                      // isLoading = false;
-                      Fluttertoast.showToast( msg: error.toString());
-
+                    if (_formKey.currentState!.validate()) {
+                      isLoading =true;
                       setState(() {});
-                    });
-                    // Perform signup logic here
+                      var user = RegApiService().registration(_emailController.text, _passwordController.text, _nameController.text, _mealNameController.text);
+                      user.then((onValue){
+                        isLoading=false;
+                        setState(() {
+                        });
+                        if(onValue['message']=="success"){
+                          Fluttertoast.showToast(msg: onValue[ 'message'].toString());
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginSignupScreen()), (route) => false);
+                          if (kDebugMode) {
+                            print("error not null : $onValue");
+                          }
+                        }else{
+                          isLoading=false;
+                          setState(() {});
+                          onValue['message'].forEach((key, value) {
+                            Fluttertoast.showToast(msg: "$key : ${value[0]}");
+                          });
+                          if (kDebugMode) {
+                            print("error :  ${onValue['message']}");
+                          }
+                        }
+                      });
 
-                    // _nameController.clear();
-                    // _emailController.clear();
-                    // _passwordController.clear();
-                  }
+                    }
                 },
                 child: const Text('Signup'),
               ),
@@ -129,16 +140,4 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
-  }
-
-  addUserData(String uid)  {
-    var firebase =  FirebaseFirestore.instance;
-    firebase.collection('user').doc(uid).set({
-      'name': _nameController.text,
-      'email': _emailController.text,
-      'password': _passwordController.text,
-      'dateTime': FieldValue.serverTimestamp()
-    }).then((value) => Fluttertoast.showToast(msg: 'Successfully Added'));
-  }
-  // ... other form fields and logic
-}
+  }}

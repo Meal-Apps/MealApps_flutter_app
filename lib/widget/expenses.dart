@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../core/utilis/controler.dart';
-import '../core/utilis/screen_size.dart';
+import '../core/utils/screen_size.dart';
 
 Widget getExpenses(BuildContext context,expenses){
   if(expenses!=null){

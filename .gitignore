@@ -9,8 +9,6 @@ firebase-debug.*.log*
 .firebaserc
 .flutter-plugins
 .flutter-plugins-dependencies
-lib/api
-
 build
 .dart_tool
 # Firebase cache

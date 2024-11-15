@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import '../core/utilis/controler.dart';
-import '../core/utilis/screen_size.dart';
+import '../core/utils/controller.dart';
+import '../core/utils/screen_size.dart';
 
 class ManagerScreen extends StatelessWidget {
   const ManagerScreen({super.key});

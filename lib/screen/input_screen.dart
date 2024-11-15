@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:mill_info/screen/home_screen.dart';
 import 'package:mill_info/core/shared_value.dart';
 
+import '../api/services/for_manager/search_user.dart';
+
 class AddData extends StatefulWidget {
   const AddData({super.key});
 
@@ -125,6 +127,7 @@ SizedBox(height: 10,),
                            }
                            return null;
                          },
+                         onChanged: _onchange,
 
                          decoration: const InputDecoration(
                              hintText: "Enter name",
@@ -237,13 +240,7 @@ SizedBox(height: 10,),
              OutlinedButton(onPressed: ()async{
                if(isAddBalance){
                  if(formKeyBalance.currentState!.validate()){
-                   await FirebaseFirestore.instance.collection('millNames').doc(millId.$).collection('balance').add({
-                     'time': inputDate.text,
-                     'details':inputDetailsBalance.text,
-                     'balance':inputBalance.text,
-                     'id':inputID.text,
-                     'dateTime':FieldValue.serverTimestamp()
-                   }).then((value) =>Fluttertoast.showToast(msg: 'Successfully Added'));
+                   // UserSearch().getSearchUser(name:).then((value) =>Fluttertoast.showToast(msg: 'Successfully Added'));
                    inputDetailsBalance.clear();
                    inputBalance.clear();
                    inputID.clear();
@@ -279,5 +276,12 @@ SizedBox(height: 10,),
         ),
       ),
     );
+  }
+  _onchange(String value){
+  var user = UserSearch().getSearchUser(value);
+  user.then((onValue){
+    print("this is ui screen $onValue");
+  });
+
   }
 }

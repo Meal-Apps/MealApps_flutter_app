@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mill_info/api/model_class/for_manager/manager-all-info.dart';
-import 'package:mill_info/core/utilis/balance-controller.dart';
-import 'package:mill_info/core/utilis/controler.dart';
-import 'package:mill_info/screen/home_screen.dart';
-import 'package:mill_info/core/shared_value.dart';
+import '../core/utils/controller.dart';
+
 
 class BalanceScreen extends StatefulWidget {
   const BalanceScreen({super.key});
@@ -37,8 +33,8 @@ class _BalanceScreenState extends State<BalanceScreen> {
               : TextButton(
                   onPressed: () {
                     isPreviousMonth = true;
-                    balances = BalanceController.balance!.balances;
-                    totalBalance = BalanceController.balance!.totalBalance;
+                    balances = AllDataController.previousBalance!.balances;
+                    totalBalance = AllDataController.previousBalance!.totalBalance;
                     setState(() {});
                   },
                   child: const Text("Previous month")),
