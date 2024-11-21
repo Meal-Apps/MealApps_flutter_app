@@ -1,10 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:mill_info/api/services/for_manager/add_balance.dart';
+import 'package:mill_info/api/services/for_manager/add_expenses.dart';
+import 'package:mill_info/core/utils/controller.dart';
 import 'package:mill_info/screen/home_screen.dart';
-import 'package:mill_info/core/shared_value.dart';
 
 import '../api/services/for_manager/search_user.dart';
 
@@ -66,7 +68,8 @@ class _AddDataState extends State<AddData> {
                 label: isAddBalance?const Text("Add Expenses"):const Text("Add balance"),
               ),
             ),
-SizedBox(height: 10,),
+const SizedBox(height: 10,),
+           //this is add balance form
            isAddBalance? Form(
              key: formKeyBalance,
              child: Column(
@@ -101,6 +104,7 @@ SizedBox(height: 10,),
                            if (value!.isEmpty){
                              return "input some value";
                            }
+                           return null;
                          },
                          keyboardType: TextInputType.number,
                          decoration: const InputDecoration(
@@ -147,6 +151,7 @@ SizedBox(height: 10,),
                            if (value!.isEmpty){
                              return " input some value";
                            }
+                           return null;
                          },
                          keyboardType: TextInputType.number,
                          decoration: const InputDecoration(
@@ -162,6 +167,9 @@ SizedBox(height: 10,),
                ],
              ),
            ):
+
+           //this is add expenses form
+
            Form(
               key: formKey,
               child: Column(
@@ -200,6 +208,7 @@ SizedBox(height: 10,),
                             if (value!.isEmpty){
                               return " input some value";
                             }
+                            return null;
                           },
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
@@ -221,6 +230,7 @@ SizedBox(height: 10,),
                         if (value!.isEmpty){
                           return " input some value";
                         }
+                        return null;
                       },
                       minLines: 2,
                       maxLines: 10,
@@ -238,8 +248,16 @@ SizedBox(height: 10,),
             const SizedBox(height: 10,),
 
              OutlinedButton(onPressed: ()async{
+
                if(isAddBalance){
                  if(formKeyBalance.currentState!.validate()){
+                   var balance= AddBalanceApiService().balance(inputBalance.text);
+                   balance.then((onValue){
+                     Get.put(AllDataController());
+                     if (kDebugMode) {
+                       print("tis is d $onValue");
+                     }
+                   });
                    // UserSearch().getSearchUser(name:).then((value) =>Fluttertoast.showToast(msg: 'Successfully Added'));
                    inputDetailsBalance.clear();
                    inputBalance.clear();
@@ -248,12 +266,11 @@ SizedBox(height: 10,),
                  }
                }else{
                  if(formKey.currentState!.validate()){
-                   await FirebaseFirestore.instance.collection('millNames').doc(millId.$).collection('millData').add({
-                     'time': inputDate.text,
-                     'details':inputDetails.text,
-                     'price':inputPrice.text,
-                     'dateTime':FieldValue.serverTimestamp()
-                   }).then((value) =>Fluttertoast.showToast(msg: 'Successfully Added'));
+                   var expenses= AddExpensesApiService().expenses(balance:inputPrice.text,date: inputDate.text, des: inputDetails.text);
+                   expenses.then((value) {
+                     Get.put(AllDataController());
+                     Fluttertoast.showToast(msg: 'Successfully Added');
+                   });
                    inputDetails.clear();
                    inputPrice.clear();
                  }
@@ -261,7 +278,7 @@ SizedBox(height: 10,),
              
            },
              style: ButtonStyle(
-               shape: MaterialStateProperty.all(
+               shape: WidgetStateProperty.all(
                  RoundedRectangleBorder(
                    borderRadius: BorderRadius.circular(5.0),
                    side: const BorderSide(width: 3, color: Colors.black),
@@ -269,7 +286,7 @@ SizedBox(height: 10,),
                ),
 
              ),
-             child: isAddBalance? Text("Add balance"): Text("Add Expenses"),
+             child: isAddBalance? const Text("Add balance"): const Text("Add Expenses"),
            ),
 
           ],
@@ -280,7 +297,9 @@ SizedBox(height: 10,),
   _onchange(String value){
   var user = UserSearch().getSearchUser(value);
   user.then((onValue){
-    print("this is ui screen $onValue");
+    if (kDebugMode) {
+      print("this is ui screen $onValue");
+    }
   });
 
   }
