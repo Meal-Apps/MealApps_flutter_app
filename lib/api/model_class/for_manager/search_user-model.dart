@@ -9,19 +9,19 @@ SearchUser searchUserFromJson(String str) => SearchUser.fromJson(json.decode(str
 String searchUserToJson(SearchUser data) => json.encode(data.toJson());
 
 class SearchUser {
-  int currentPage;
+  int? currentPage;
   List<Datum> data;
   String firstPageUrl;
-  int from;
-  int lastPage;
+  int? from;
+  int? lastPage;
   String lastPageUrl;
   List<Link> links;
   dynamic nextPageUrl;
   String path;
-  int perPage;
+  int? perPage;
   dynamic prevPageUrl;
-  int to;
-  int total;
+  int? to;
+  int? total;
 
   SearchUser({
     required this.currentPage,

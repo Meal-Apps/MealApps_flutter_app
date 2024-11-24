@@ -7,7 +7,7 @@ import '../../endpoints.dart';
 
 class UserSearch{
   Future<SearchUser> getSearchUser(name)async{
-    final response = await http.get(Uri.parse('https://mealapi.devrefat.com/api/usersearch/j'),
+    final response = await http.get(Uri.parse('https://mealapi.devrefat.com/api/usersearch/$name'),
         headers: {
           'Authorization': 'Bearer ${token.$}'
         }

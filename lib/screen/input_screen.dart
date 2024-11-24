@@ -6,8 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:mill_info/api/services/for_manager/add_balance.dart';
 import 'package:mill_info/api/services/for_manager/add_expenses.dart';
 import 'package:mill_info/core/utils/controller.dart';
+import 'package:mill_info/core/utils/screen_size.dart';
 import 'package:mill_info/screen/home_screen.dart';
+import 'package:mill_info/widget/show_search_user.dart';
 
+import '../api/model_class/for_manager/search_user-model.dart';
 import '../api/services/for_manager/search_user.dart';
 
 class AddData extends StatefulWidget {
@@ -19,288 +22,330 @@ class AddData extends StatefulWidget {
 
 class _AddDataState extends State<AddData> {
   var formKey = GlobalKey<FormState>();
-  var inputDetails= TextEditingController();
-  var inputPrice= TextEditingController();
-  var inputDate= TextEditingController();
+  var inputDetails = TextEditingController();
+  var inputPrice = TextEditingController();
+  var inputDate = TextEditingController();
   var formKeyBalance = GlobalKey<FormState>();
-  var inputDetailsBalance= TextEditingController();
-  var inputID= TextEditingController();
-  var inputBalance= TextEditingController();
-
-  bool isAddBalance= false;
-@override
+  var inputName = TextEditingController();
+  var inputID = TextEditingController();
+  var inputBalance = TextEditingController();
+  SearchUser? userData;
+  bool isAddBalance = false;
+  var userId;
+  @override
   void initState() {
     // TODO: implement initState
-  var date = DateTime.now();
-  var shortedDate = DateFormat.yMMMEd().format(date);
-  inputDate.text = shortedDate.toString();
+    var date = DateTime.now();
+    var shortedDate = DateFormat.yMMMEd().format(date);
+    inputDate.text = shortedDate.toString();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(title: const Text("OUR MIL"),
-        leading:IconButton(onPressed: ()=>Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>const HomeScreen()),ModalRoute.withName('/'),), icon: const Icon(Icons.arrow_back)),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("OUR MIL"),
+        leading: IconButton(
+            onPressed: () => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  ModalRoute.withName('/'),
+                ),
+            icon: const Icon(Icons.arrow_back)),
       ),
       body: Container(
-        margin: const EdgeInsetsDirectional.symmetric(horizontal: 5,vertical: 5),
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 5,vertical: 5),
-
+        margin:
+            const EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 5),
+        padding:
+            const EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 5),
         child: Column(
           children: [
             Container(
               alignment: Alignment.centerRight,
-              padding:EdgeInsets.only(right:MediaQuery.sizeOf(context).width*0.035,),
-               width: MediaQuery.sizeOf(context).width,
-              child: TextButton.icon(onPressed: (){
-                if(isAddBalance){
-                  setState(() {
-                    isAddBalance= false;
-                  });
-                }else{
-                  setState(() {
-                    isAddBalance= true;
-                  });
-                }
-
-              },
-                icon: const Icon(Icons.edit,size: 15,),
-                label: isAddBalance?const Text("Add Expenses"):const Text("Add balance"),
+              padding: EdgeInsets.only(
+                right: MediaQuery.sizeOf(context).width * 0.035,
+              ),
+              width: MediaQuery.sizeOf(context).width,
+              child: TextButton.icon(
+                onPressed: () {
+                  if (isAddBalance) {
+                    setState(() {
+                      isAddBalance = false;
+                    });
+                  } else {
+                    setState(() {
+                      isAddBalance = true;
+                    });
+                  }
+                },
+                icon: const Icon(
+                  Icons.edit,
+                  size: 15,
+                ),
+                label: isAddBalance
+                    ? const Text("Add Expenses")
+                    : const Text("Add balance"),
               ),
             ),
-const SizedBox(height: 10,),
-           //this is add balance form
-           isAddBalance? Form(
-             key: formKeyBalance,
-             child: Column(
-               children: [
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                   children: [
-                     SizedBox(
-                       width: MediaQuery.sizeOf(context).width*0.40,
-                       child: TextFormField(
-                         controller: inputDate,
-                         validator: (value){
-                           if (value!.isEmpty){
-                             return "input some value";
-                           }
-                           return null;
-                         },
-
-                         decoration: const InputDecoration(
-                             hintText: "Enter Date",
-                             border: OutlineInputBorder(
-                             )
-                         ),
-                       ),
-                     ),
-                     const SizedBox(height: 10,),
-                     SizedBox(
-                       width: MediaQuery.sizeOf(context).width*0.40,
-                       child: TextFormField(
-                         controller: inputBalance,
-                         validator: (value){
-                           if (value!.isEmpty){
-                             return "input some value";
-                           }
-                           return null;
-                         },
-                         keyboardType: TextInputType.number,
-                         decoration: const InputDecoration(
-                             hintText: "Enter Balance",
-                             border: OutlineInputBorder(
-                             )
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-                 const SizedBox(height: 10,),
-
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                   children: [
-                     SizedBox(
-                       width: MediaQuery.sizeOf(context).width*0.40,
-                       child: TextFormField(
-                         controller: inputDetailsBalance,
-                         validator: (value){
-                           if (value!.isEmpty){
-                             return " input some value";
-                           }
-                           return null;
-                         },
-                         onChanged: _onchange,
-
-                         decoration: const InputDecoration(
-                             hintText: "Enter name",
-                             border: OutlineInputBorder(
-                             )
-                         ),
-                       ),
-                     ),
-                     const SizedBox(height: 10,),
-                     //------------------------------------------------------ id text filed-----------------------------------------
-
-                     SizedBox(
-                       width: MediaQuery.sizeOf(context).width*0.40,
-                       child: TextFormField(
-                         controller: inputID,
-                         validator: (value){
-                           if (value!.isEmpty){
-                             return " input some value";
-                           }
-                           return null;
-                         },
-                         keyboardType: TextInputType.number,
-                         decoration: const InputDecoration(
-                             hintText: "Enter ID",
-                             border: OutlineInputBorder(
-                             )
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-
-               ],
-             ),
-           ):
-
-           //this is add expenses form
-
-           Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      //------------------------------------------------------ date text filed-----------------------------------------
-
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width*0.40,
-                        child: TextFormField(
-                          controller: inputDate,
-                          validator: (value){
-                            if (value!.isEmpty){
-                              return " input some value";
-                            }
-                            return null;
-                          },
-
-                          decoration: const InputDecoration(
-                            hintText: "Enter Date",
-                            border: OutlineInputBorder(
-                            )
-                          ),
+            const SizedBox(
+              height: 10,
+            ),
+            //this is add balance form
+            isAddBalance
+                ? Form(
+                    key: formKeyBalance,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.40,
+                              child: TextFormField(
+                                controller: inputDate,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "input some value";
+                                  }
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                    hintText: "Enter Date",
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.40,
+                              child: TextFormField(
+                                controller: inputBalance,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "input some value";
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                    hintText: "Enter Balance",
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 10,),
-                      //------------------------------------------------------ price text filed-----------------------------------------
-
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width*0.30,
-                        child: TextFormField(
-                          controller: inputPrice,
-                          validator: (value){
-                            if (value!.isEmpty){
-                              return " input some value";
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                              hintText: "Enter Price",
-                              border: OutlineInputBorder(
-                              )
-                          ),
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.40,
+                              child: TextFormField(
+                                controller: inputName,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return " input some value";
+                                  }
+                                  return null;
+                                },
+                                onChanged: _onchange,
+                                decoration: const InputDecoration(
+                                    hintText: "Enter name",
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.40,
+                              height: screenHeight(context)*0.06,
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                    if (formKeyBalance.currentState!.validate()) {
+                                      var balance =
+                                      AddBalanceApiService().balance(inputBalance.text,userId);
+                                      balance.then((onValue) {
+                                        Get.put(AllDataController());
+                                        Fluttertoast.showToast(msg: onValue['message']);
+                                        if (kDebugMode) {
+                                          print("tis is d $onValue");
+                                        }
+                                      });
+                                      inputName.clear();
+                                      inputBalance.clear();
+                                      inputID.clear();
+                                    }
+
+                                },
+                                style: ButtonStyle(
+                                  shape: WidgetStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: const BorderSide(width: 3, color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                child:const Text("Add balance"),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      userData!=null&& userData!.data.isNotEmpty  ?  SizedBox(
+                        height: 200,
+                        child: ListView.builder(
+                          itemCount: userData!.data.length,
+                            itemBuilder: (context,index){
+                            return ListTile(
+                              onTap: (){
+                                userId= userData!.data[index].id;
+                                inputName.text= userData!.data[index].name;
+                                userData=null;
+                                setState(() {
+
+                                });
+                              },
+                              title: Text(userData!.data[index].name),
+                              subtitle: Text(userData!.data[index].email),
+                            );
+                          }),
+                      ):const SizedBox(),
+                      ],
+                    ),
+                  )
+                :
+
+                //this is add expenses form
+
+                Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            //------------------------------------------------------ date text filed-----------------------------------------
+
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.40,
+                              child: TextFormField(
+                                controller: inputDate,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return " input some value";
+                                  }
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                    hintText: "Enter Date",
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            //------------------------------------------------------ price text filed-----------------------------------------
+
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.30,
+                              child: TextFormField(
+                                controller: inputPrice,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return " input some value";
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                    hintText: "Enter Price",
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
 //------------------------------------------------------ details text filed-----------------------------------------
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width*0.85,
-                    child: TextFormField(
-                      controller: inputDetails,
-                      validator: (value){
-                        if (value!.isEmpty){
-                          return " input some value";
-                        }
-                        return null;
-                      },
-                      minLines: 2,
-                      maxLines: 10,
-                      decoration: const InputDecoration(
-                          hintText: "Enter Details",
-                          border: OutlineInputBorder(
-                          )
-                      ),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.85,
+                          child: TextFormField(
+                            controller: inputDetails,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return " input some value";
+                              }
+                              return null;
+                            },
+                            minLines: 2,
+                            maxLines: 10,
+                            decoration: const InputDecoration(
+                                hintText: "Enter Details",
+                                border: OutlineInputBorder()),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-
-                ],
-              ),
+            const SizedBox(
+              height: 10,
             ),
-            const SizedBox(height: 10,),
 
-             OutlinedButton(onPressed: ()async{
+            isAddBalance==false?  OutlinedButton(
+              onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    var expenses = AddExpensesApiService().expenses(
+                        balance: inputPrice.text,
+                        date: inputDate.text,
+                        des: inputDetails.text);
+                    expenses.then((value) {
+                      Get.put(AllDataController());
+                      Fluttertoast.showToast(msg: 'Successfully Added');
+                    });
+                    inputDetails.clear();
+                    inputPrice.clear();
+                  }
 
-               if(isAddBalance){
-                 if(formKeyBalance.currentState!.validate()){
-                   var balance= AddBalanceApiService().balance(inputBalance.text);
-                   balance.then((onValue){
-                     Get.put(AllDataController());
-                     if (kDebugMode) {
-                       print("tis is d $onValue");
-                     }
-                   });
-                   // UserSearch().getSearchUser(name:).then((value) =>Fluttertoast.showToast(msg: 'Successfully Added'));
-                   inputDetailsBalance.clear();
-                   inputBalance.clear();
-                   inputID.clear();
-
-                 }
-               }else{
-                 if(formKey.currentState!.validate()){
-                   var expenses= AddExpensesApiService().expenses(balance:inputPrice.text,date: inputDate.text, des: inputDetails.text);
-                   expenses.then((value) {
-                     Get.put(AllDataController());
-                     Fluttertoast.showToast(msg: 'Successfully Added');
-                   });
-                   inputDetails.clear();
-                   inputPrice.clear();
-                 }
-               }
-             
-           },
-             style: ButtonStyle(
-               shape: WidgetStateProperty.all(
-                 RoundedRectangleBorder(
-                   borderRadius: BorderRadius.circular(5.0),
-                   side: const BorderSide(width: 3, color: Colors.black),
-                 ),
-               ),
-
-             ),
-             child: isAddBalance? const Text("Add balance"): const Text("Add Expenses"),
-           ),
-
+              },
+              style: ButtonStyle(
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    side: const BorderSide(width: 3, color: Colors.black),
+                  ),
+                ),
+              ),
+              child: const Text("Add Expenses"),
+            ):SizedBox(),
           ],
         ),
       ),
     );
   }
-  _onchange(String value){
-  var user = UserSearch().getSearchUser(value);
-  user.then((onValue){
-    if (kDebugMode) {
-      print("this is ui screen $onValue");
+
+  _onchange(String value) {
+    if(value.isNotEmpty){
+      UserSearch().getSearchUser(value).then((onValue) {
+        if (kDebugMode) {
+          userData =onValue;
+          setState(() {
+
+          });
+          print("this is ui screen ${userData!.data}");
+        }
+      });
+    }else{
+      userData =null;
+      setState(() {
+
+      });
     }
-  });
 
   }
 }

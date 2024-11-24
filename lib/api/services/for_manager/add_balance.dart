@@ -5,7 +5,7 @@ import 'package:mill_info/api/endpoints.dart';
 import '../../../core/shared_value.dart';
 
 class AddBalanceApiService {
-  Future<Map<String,dynamic>> balance(String balance) async {
+  Future<Map<String,dynamic>> balance(String balance,id) async {
     try{
       const url = 'https://mealapi.devrefat.com/api/$addBalance'; // Replace with your API URL
       final response = await http.post(Uri.parse(url), headers: {
@@ -15,7 +15,7 @@ class AddBalanceApiService {
       }, body: jsonEncode(
           {
             "balance" : balance,
-            "user_id" :22
+            "user_id" :id
           }
       ));
       print(response.body);
