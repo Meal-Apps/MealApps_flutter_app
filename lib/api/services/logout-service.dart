@@ -13,7 +13,6 @@ class LogoutApiService {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token.$}',
       },);
-
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

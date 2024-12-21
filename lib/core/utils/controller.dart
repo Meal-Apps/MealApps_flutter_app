@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:mill_info/api/model_class/for_manager/manager-all-info.dart';
 import 'package:mill_info/api/model_class/for_user/expanses-model.dart';
@@ -10,26 +9,32 @@ class AllDataController extends GetxController {
  static ManagerAllInfo? managerAllInfo ;
  static Expenses? expenses ;
  static balance.Balance? previousBalance ;
- var isLoading = true.obs;
-  @override
+ var isAllLoading = true.obs;
+ var isPreviousDataLoading = true.obs;
+ @override
   void onInit() {
     fetchData();
+    fetchPreviousData();
     super.onInit();
   }
   fetchData() async {
     try {
-      isLoading(true);
+      isAllLoading(true);
       var response = await ApiData().getManagerInfo();
-      var expensesResponse=await getPreviousExpenses();
-      var previousBalanceResponse = await getPreviousBalance();
-        print("suc controller :  ${response}");
-        managerAllInfo=response;
-        expenses=expensesResponse;
-        previousBalance =previousBalanceResponse;
+      managerAllInfo=response;
     } finally {
-
-        isLoading(false);
-
+        isAllLoading(false);
     }
+  }
+ fetchPreviousData()async{
+   try{
+     isPreviousDataLoading(true);
+     var expensesResponse=await getPreviousExpenses();
+     var previousBalanceResponse = await getPreviousBalance();
+     previousBalance =previousBalanceResponse;
+     expenses=expensesResponse;
+   }finally{
+     isPreviousDataLoading(false);
+   }
   }
 }

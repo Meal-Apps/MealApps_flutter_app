@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mill_info/core/data-load-from-api.dart';
+import 'package:mill_info/screen/home_screen.dart';
 import 'package:shared_value/shared_value.dart';
 
 main() async {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:loadData()
+      home:loadData(const HomeScreen())
     );
   }
 

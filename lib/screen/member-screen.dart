@@ -11,7 +11,7 @@ class MemberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Members"),
+        title: const Text("All Members"),
       ),
       body: Column(
         children: [

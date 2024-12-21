@@ -7,9 +7,8 @@ import 'package:mill_info/api/services/for_manager/add_balance.dart';
 import 'package:mill_info/api/services/for_manager/add_expenses.dart';
 import 'package:mill_info/core/utils/controller.dart';
 import 'package:mill_info/core/utils/screen_size.dart';
+import 'package:mill_info/screen/balance_screen.dart';
 import 'package:mill_info/screen/home_screen.dart';
-import 'package:mill_info/widget/show_search_user.dart';
-
 import '../api/model_class/for_manager/search_user-model.dart';
 import '../api/services/for_manager/search_user.dart';
 
@@ -91,7 +90,7 @@ class _AddDataState extends State<AddData> {
             const SizedBox(
               height: 10,
             ),
-            //this is add balance form
+            //-------------------------------------------this is add balance form------------------------------------------------//
             isAddBalance
                 ? Form(
                     key: formKeyBalance,
@@ -100,24 +99,6 @@ class _AddDataState extends State<AddData> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.40,
-                              child: TextFormField(
-                                controller: inputDate,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "input some value";
-                                  }
-                                  return null;
-                                },
-                                decoration: const InputDecoration(
-                                    hintText: "Enter Date",
-                                    border: OutlineInputBorder()),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.40,
                               child: TextFormField(
@@ -134,14 +115,6 @@ class _AddDataState extends State<AddData> {
                                     border: OutlineInputBorder()),
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.40,
                               child: TextFormField(
@@ -158,44 +131,12 @@ class _AddDataState extends State<AddData> {
                                     border: OutlineInputBorder()),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.40,
-                              height: screenHeight(context)*0.06,
-                              child: OutlinedButton(
-                                onPressed: () async {
-                                    if (formKeyBalance.currentState!.validate()) {
-                                      var balance =
-                                      AddBalanceApiService().balance(inputBalance.text,userId);
-                                      balance.then((onValue) {
-                                        Get.put(AllDataController());
-                                        Fluttertoast.showToast(msg: onValue['message']);
-                                        if (kDebugMode) {
-                                          print("tis is d $onValue");
-                                        }
-                                      });
-                                      inputName.clear();
-                                      inputBalance.clear();
-                                      inputID.clear();
-                                    }
-
-                                },
-                                style: ButtonStyle(
-                                  shape: WidgetStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: const BorderSide(width: 3, color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                child:const Text("Add balance"),
-                              ),
-                            ),
-
                           ],
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+
                       userData!=null&& userData!.data.isNotEmpty  ?  SizedBox(
                         height: 200,
                         child: ListView.builder(
@@ -214,7 +155,37 @@ class _AddDataState extends State<AddData> {
                               subtitle: Text(userData!.data[index].email),
                             );
                           }),
-                      ):const SizedBox(),
+                      ): const Text(""),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.40,
+                          height: screenHeight(context)*0.06,
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              if (formKeyBalance.currentState!.validate()) {
+                                var balance = AddBalanceApiService().balance(inputBalance.text,userId);
+                                balance.then((onValue) {
+                                  Fluttertoast.showToast(msg: onValue['message']);
+                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>const BalanceScreen()));
+                                  if (kDebugMode) {
+                                    print("tis is d $onValue");
+                                  }
+                                });
+                                inputName.clear();
+                                inputBalance.clear();
+                                inputID.clear();
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  side: const BorderSide(width: 3, color: Colors.black),
+                                ),
+                              ),
+                            ),
+                            child:const Text("Add balance"),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -250,7 +221,6 @@ class _AddDataState extends State<AddData> {
                               height: 10,
                             ),
                             //------------------------------------------------------ price text filed-----------------------------------------
-
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.30,
                               child: TextFormField(
@@ -296,7 +266,6 @@ class _AddDataState extends State<AddData> {
             const SizedBox(
               height: 10,
             ),
-
             isAddBalance==false?  OutlinedButton(
               onPressed: () async {
                   if (formKey.currentState!.validate()) {
@@ -311,7 +280,6 @@ class _AddDataState extends State<AddData> {
                     inputDetails.clear();
                     inputPrice.clear();
                   }
-
               },
               style: ButtonStyle(
                 shape: WidgetStateProperty.all(
@@ -322,28 +290,22 @@ class _AddDataState extends State<AddData> {
                 ),
               ),
               child: const Text("Add Expenses"),
-            ):SizedBox(),
+            ):const SizedBox(),
           ],
         ),
       ),
     );
   }
-
   _onchange(String value) {
     if(value.isNotEmpty){
       UserSearch().getSearchUser(value).then((onValue) {
-        if (kDebugMode) {
+        setState(() {
           userData =onValue;
-          setState(() {
-
-          });
-          print("this is ui screen ${userData!.data}");
-        }
+        });
       });
     }else{
-      userData =null;
       setState(() {
-
+        userData =null;
       });
     }
 

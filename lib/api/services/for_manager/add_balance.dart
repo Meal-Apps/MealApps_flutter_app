@@ -18,8 +18,6 @@ class AddBalanceApiService {
             "user_id" :id
           }
       ));
-      print(response.body);
-      print(response.statusCode);
 
       return jsonDecode(response.body);
     }catch(e){

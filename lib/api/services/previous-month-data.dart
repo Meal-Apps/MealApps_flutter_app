@@ -6,8 +6,6 @@ import 'package:mill_info/api/model_class/for_user/expanses-model.dart';
 import '../../core/shared_value.dart';
 import '../endpoints.dart';
 import 'package:http/http.dart' as http;
-
-
 Future<Balance> getPreviousBalance() async{
   final response  = await http.get(
       Uri.parse("https://mealapi.devrefat.com/api/$get_previous_balance"),
@@ -32,9 +30,7 @@ Future<Expenses> getPreviousExpenses() async{
   );
   if (response.statusCode == 200) {
     var data =expensesFromJson(response.body);
-    print(data);
     return data;
-
   } else {
     throw Exception('Failed to load data');
   }

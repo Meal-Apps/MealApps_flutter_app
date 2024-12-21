@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-import 'package:get/get_common/get_reset.dart';
 import 'package:shared_value/shared_value.dart';
 
 final SharedValue<dynamic> millId = SharedValue(
