@@ -169,10 +169,11 @@ class _AddDataState extends State<AddData> {
                                   if (kDebugMode) {
                                     print("tis is d $onValue");
                                   }
+                                  inputName.clear();
+                                  inputBalance.clear();
+                                  inputID.clear();
                                 });
-                                inputName.clear();
-                                inputBalance.clear();
-                                inputID.clear();
+
                               }
                             },
                             style: ButtonStyle(

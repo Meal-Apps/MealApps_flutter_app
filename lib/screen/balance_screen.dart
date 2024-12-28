@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../core/utils/controller.dart';
-
 
 class BalanceScreen extends StatefulWidget {
   const BalanceScreen({super.key});
