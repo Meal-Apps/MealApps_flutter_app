@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const BalanceScreen())),
+                      builder: (context) =>  BalanceView())),
               child: const Text("Balance")),
           if (isManager.$)
             IconButton(

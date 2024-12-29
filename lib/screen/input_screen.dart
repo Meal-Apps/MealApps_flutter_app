@@ -165,7 +165,7 @@ class _AddDataState extends State<AddData> {
                                 var balance = AddBalanceApiService().balance(inputBalance.text,userId);
                                 balance.then((onValue) {
                                   Fluttertoast.showToast(msg: onValue['message']);
-                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>const BalanceScreen()));
+                                  Get.to(() => BalanceView());
                                   if (kDebugMode) {
                                     print("tis is d $onValue");
                                   }
@@ -276,10 +276,11 @@ class _AddDataState extends State<AddData> {
                         des: inputDetails.text);
                     expenses.then((value) {
                       Get.put(AllDataController());
+                      inputDetails.clear();
+                      inputPrice.clear();
                       Fluttertoast.showToast(msg: 'Successfully Added');
                     });
-                    inputDetails.clear();
-                    inputPrice.clear();
+
                   }
               },
               style: ButtonStyle(

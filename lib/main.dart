@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mill_info/core/data-load-from-api.dart';
 import 'package:mill_info/screen/home_screen.dart';
 import 'package:shared_value/shared_value.dart';
+
+import 'core/utils/controller.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(

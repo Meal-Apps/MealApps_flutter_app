@@ -15,6 +15,7 @@ Future<Balance> getPreviousBalance() async{
   );
   if (response.statusCode == 200) {
     var data =balanceFromJson(response.body);
+    print(data);
     return data;
 
   } else {

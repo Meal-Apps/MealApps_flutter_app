@@ -45,7 +45,7 @@ class MemberScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                     child: ListTile(
                       leading: Text(
-                       "${ DateFormat.yMEd().format(AllDataController.managerAllInfo!.users[index].createdAt)}",
+                       DateFormat.yMEd().format(AllDataController.managerAllInfo!.users[index].createdAt),
                         style: const TextStyle(fontSize: 14),
                       ),
                       title: Text(
