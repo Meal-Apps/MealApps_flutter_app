@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:mill_info/api/services/for_manager/registration.dart';
 import 'package:mill_info/screen/login_screen.dart';
 
-import '../core/utils/email-velidation.dart';
+import '../core/utils/email_validation.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -120,7 +121,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           });
                           if(onValue['message']=="success"){
                             Fluttertoast.showToast(msg: onValue[ 'message'].toString());
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginSignupScreen()), (route) => false);
+                            Get.offAll(()=> const LoginSignupScreen());
                             if (kDebugMode) {
                               print("error not null : $onValue");
                             }

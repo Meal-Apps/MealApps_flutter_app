@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../core/utils/controller.dart';
 import '../core/utils/screen_size.dart';
+import 'package:get/get.dart';
 
 class ManagerScreen extends StatelessWidget {
-  const ManagerScreen({super.key});
-
+   ManagerScreen({super.key});
+   var manager = Get.put(ApiController()).manager;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,19 +35,22 @@ class ManagerScreen extends StatelessWidget {
           //amount row
           SizedBox(
             height: screenHeight(context) * 0.8,
-            child: ListTile(
-              leading: Text(
-                AllDataController.managerAllInfo!.manager.mealName,
-                style: const TextStyle(fontSize: 14),
-              ),
-              title: Text(
-                AllDataController.managerAllInfo!.manager.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-              trailing: Text(
-                AllDataController.managerAllInfo!.manager.email,
-                style: const TextStyle(fontSize: 14),
+            child: RefreshIndicator(
+              onRefresh: ApiController().refreshData,
+              child: ListTile(
+                leading: Text(
+                 manager!.mealName,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                title: Text(
+                   manager!.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                trailing: Text(
+                   manager!.email,
+                  style: const TextStyle(fontSize: 14),
+                ),
               ),
             ),
           )

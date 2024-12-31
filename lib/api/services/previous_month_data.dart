@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mill_info/api/model_class/for_user/balance-model.dart';
+import 'package:mill_info/api/model_class/for_user/balance_model.dart';
 import 'package:mill_info/api/model_class/for_user/expanses-model.dart';
 
 import '../../core/shared_value.dart';
@@ -22,7 +22,7 @@ Future<Balance> getPreviousBalance() async{
     throw Exception('Failed to load data');
   }
 }
-Future<Expenses> getPreviousExpenses() async{
+Future<PreviousMonthExpenses> getPreviousExpenses() async{
   final response  = await http.get(
       Uri.parse("https://mealapi.devrefat.com/api/$get_previous_expenses"),
       headers: {
@@ -30,7 +30,7 @@ Future<Expenses> getPreviousExpenses() async{
       }
   );
   if (response.statusCode == 200) {
-    var data =expensesFromJson(response.body);
+    var data =previousMonthExpensesFromJson(response.body);
     return data;
   } else {
     throw Exception('Failed to load data');

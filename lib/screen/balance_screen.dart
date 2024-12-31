@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../core/utils/controller.dart';
-
 class BalanceView extends StatelessWidget{
-   final ApiController apiController = Get.put(ApiController());
-  final PreviousMonthBalanceApiController controller =Get.put(PreviousMonthBalanceApiController());
+  ApiController apiController = Get.put(ApiController());
+   PreviousMonthBalanceApiController controller =Get.put(PreviousMonthBalanceApiController());
   RxBool isPreviousMonth = false.obs;
   BalanceView({super.key});
   @override
@@ -39,7 +38,7 @@ class BalanceView extends StatelessWidget{
           return const Center( child: CircularProgressIndicator(),);
         }
           return RefreshIndicator(
-            onRefresh:isPreviousMonth.value?controller.refreshData: apiController.refreshData,
+            onRefresh: apiController.refreshData,
             child: ListView.builder(
                 itemCount:balances.length,
                 itemBuilder: (context, index) {

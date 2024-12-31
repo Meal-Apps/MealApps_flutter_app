@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mill_info/api/services/for_manager/userCreate.dart';
-import 'package:mill_info/core/data-load-from-api.dart';
-import 'package:mill_info/core/utils/email-velidation.dart';
-import 'package:mill_info/screen/member-screen.dart';
+import 'package:mill_info/core/utils/email_validation.dart';
+import 'package:mill_info/screen/member_screen.dart';
 
 import '../core/utils/controller.dart';
+
 class UserCreateScreen extends StatefulWidget {
   const UserCreateScreen({super.key});
   @override
@@ -32,7 +32,10 @@ class _UserCreateScreen extends State<UserCreateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text("Create User",style: TextStyle(fontSize: 18,height: 10),),
+                const Text(
+                  "Create User",
+                  style: TextStyle(fontSize: 18, height: 10),
+                ),
                 // Name field
                 TextFormField(
                   controller: _nameController,
@@ -47,7 +50,9 @@ class _UserCreateScreen extends State<UserCreateScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 // Email field
                 TextFormField(
                   controller: _emailController,
@@ -55,7 +60,7 @@ class _UserCreateScreen extends State<UserCreateScreen> {
                     if (value!.isEmpty) {
                       return 'Please enter user email';
                     }
-                    if(!validateEmail(value)){
+                    if (!validateEmail(value)) {
                       return 'Please enter validate email';
                     }
                     return null;
@@ -65,7 +70,9 @@ class _UserCreateScreen extends State<UserCreateScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 // Password field
                 TextFormField(
                   controller: _passwordController,
@@ -81,41 +88,52 @@ class _UserCreateScreen extends State<UserCreateScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 10,),
-        
+                const SizedBox(
+                  height: 10,
+                ),
+
                 // Signup button
-                if (isLoading) const CircularProgressIndicator() else ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      FocusScope.of(context).unfocus();
-                      isLoading =true;
-                      setState(() {});
-                      var user = UserCreateApiService().userCreate(_emailController.text, _passwordController.text, _nameController.text);
-                      user.then((onValue){
-                        isLoading=false;
-                        if(onValue['success']!=null){
-                          String email=onValue['message']['email']?[0]??"";
-                          String password=onValue['message']['password']?[0]??"";
-                          Fluttertoast.showToast(msg: "$email $password");
-                        }else{
-                          Get.put(AllDataController());
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const MemberScreen()));
+                if (isLoading)
+                  const CircularProgressIndicator()
+                else
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        FocusScope.of(context).unfocus();
+                        isLoading = true;
+                        setState(() {});
+                        var user = UserCreateApiService().userCreate(
+                            _emailController.text,
+                            _passwordController.text,
+                            _nameController.text);
+                        user.then((onValue) {
+                          isLoading = false;
+                          if (onValue['success'] != null) {
+                            String email =
+                                onValue['message']['email']?[0] ?? "";
+                            String password =
+                                onValue['message']['password']?[0] ?? "";
+                            Fluttertoast.showToast(msg: "$email $password");
+                          } else {
+                            Get.put(ApiController()).refreshData();
+                            Get.offAll( MemberScreen());
                             _emailController.clear();
                             _nameController.clear();
                             _passwordController.clear();
-                          Fluttertoast.showToast(msg: "${onValue['message']}");
-                        }
-                        setState(() {});
-                      });
-        
-                    }
-                  },
-                  child: const Text('Create User'),
-                ),
+                            Fluttertoast.showToast(
+                                msg: "${onValue['message']}");
+                          }
+                          setState(() {});
+                        });
+                      }
+                    },
+                    child: const Text('Create User'),
+                  ),
               ],
             ),
           ),
         ),
       ),
     );
-  }}
+  }
+}

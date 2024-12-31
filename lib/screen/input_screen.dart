@@ -30,12 +30,12 @@ class _AddDataState extends State<AddData> {
   var inputBalance = TextEditingController();
   SearchUser? userData;
   bool isAddBalance = false;
-  var userId;
+  int? userId;
   @override
   void initState() {
     // TODO: implement initState
     var date = DateTime.now();
-    var shortedDate = DateFormat.yMMMEd().format(date);
+    var shortedDate = DateFormat("yyyy-MM-dd").format(date);
     inputDate.text = shortedDate.toString();
     super.initState();
   }
@@ -48,7 +48,7 @@ class _AddDataState extends State<AddData> {
         leading: IconButton(
             onPressed: () => Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  MaterialPageRoute(builder: (context) =>  HomeScreen()),
                   ModalRoute.withName('/'),
                 ),
             icon: const Icon(Icons.arrow_back)),
@@ -164,7 +164,9 @@ class _AddDataState extends State<AddData> {
                               if (formKeyBalance.currentState!.validate()) {
                                 var balance = AddBalanceApiService().balance(inputBalance.text,userId);
                                 balance.then((onValue) {
+                                   Get.put(ApiController()).refreshData();
                                   Fluttertoast.showToast(msg: onValue['message']);
+
                                   Get.to(() => BalanceView());
                                   if (kDebugMode) {
                                     print("tis is d $onValue");
@@ -192,7 +194,7 @@ class _AddDataState extends State<AddData> {
                   )
                 :
 
-                //this is add expenses form
+                //--------------------------------------------------------this is add expenses form----------============================================//
 
                 Form(
                     key: formKey,
@@ -201,7 +203,7 @@ class _AddDataState extends State<AddData> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            //------------------------------------------------------ date text filed-----------------------------------------
+                            //------------------------------------------------------ date text filed-----------------------------------------//
 
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.40,
@@ -275,7 +277,7 @@ class _AddDataState extends State<AddData> {
                         date: inputDate.text,
                         des: inputDetails.text);
                     expenses.then((value) {
-                      Get.put(AllDataController());
+                      Get.put(ApiController()).refreshData();
                       inputDetails.clear();
                       inputPrice.clear();
                       Fluttertoast.showToast(msg: 'Successfully Added');

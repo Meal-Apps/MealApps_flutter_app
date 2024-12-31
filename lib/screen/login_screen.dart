@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:mill_info/api/endpoints.dart';
-import 'package:mill_info/api/services/login-service.dart';
+import 'package:mill_info/api/services/login_service.dart';
 import 'package:mill_info/core/shared_value.dart';
 import 'package:mill_info/main.dart';
 import 'package:mill_info/screen/singup_screen.dart';
 
-import '../core/utils/email-velidation.dart';
+import '../core/utils/email_validation.dart';
+
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({super.key});
   @override
   State<LoginSignupScreen> createState() => _LoginSignupScreenState();
 }
+
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -41,7 +44,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     if (value!.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if(!validateEmail(value)){
+                    if (!validateEmail(value)) {
                       return 'Please enter validate email';
                     }
                     return null;
@@ -79,18 +82,19 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          await LoginApiService().login(_emailController.text, _passwordController.text, endpoint: userLogin).then(
-                                  (value){
-                                token.$=value['access_token'];
-                                isManager.$= false;
-                                isManager.load();
-                                token.load();
-                                // print("this is token : ${token.$}");
-                                Fluttertoast.showToast( msg:"Login successfully");
-                                // print(" msg ${value['name']}");
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const MyApp()),  (Route<dynamic> route) => false);
-                              }).catchError((e){
-                            Fluttertoast.showToast( msg:"error:  $e");
+                          await LoginApiService()
+                              .login(_emailController.text,
+                                  _passwordController.text,
+                                  endpoint: userLogin)
+                              .then((value) {
+                            token.$ = value['access_token'];
+                            isManager.$ = false;
+                            isManager.load();
+                            token.load();
+                            Fluttertoast.showToast(msg: "Login successfully");
+                            Get.offAll(const MyApp());
+                          }).catchError((e) {
+                            Fluttertoast.showToast(msg: "error:  $e");
                           });
                         }
                       },
@@ -99,26 +103,27 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          await LoginApiService().login(_emailController.text, _passwordController.text, endpoint: managerLogin).then(
-                                  (value){
-                                token.$=value['access_token'];
-                                isManager.$=true;
-                                isManager.load();
-                                token.load();
-                                // print("this is token : ${token.$}");
-                                Fluttertoast.showToast( msg:"${value['message']}");
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const MyApp()),  (Route<dynamic> route) => false);
-                              }).catchError((e){
-                            Fluttertoast.showToast( msg:"error: $e");
+                          await LoginApiService()
+                              .login(_emailController.text,
+                                  _passwordController.text,
+                                  endpoint: managerLogin)
+                              .then((value) {
+                            token.$ = value['access_token'];
+                            isManager.$ = true;
+                            isManager.load();
+                            token.load();
+                            // print("this is token : ${token.$}");
+                            Fluttertoast.showToast(msg: "${value['message']}");
+                            Get.offAll(() => const MyApp());
+                          }).catchError((e) {
+                            Fluttertoast.showToast(msg: "error: $e");
                           });
-                          // print("isclicked");
                         }
                       },
                       child: const Text('Login as manager'),
                     ),
                   ],
-                )
-               ,
+                ),
 
                 // Switch between login and signup modes
                 TextButton(

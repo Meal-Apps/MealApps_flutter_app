@@ -1,34 +1,34 @@
 // To parse this JSON data, do
 //
-//     final expenses = expensesFromJson(jsonString);
+//     final previousMonthExpenses = previousMonthExpensesFromJson(jsonString);
 
 import 'dart:convert';
 
-Expenses expensesFromJson(String str) => Expenses.fromJson(json.decode(str));
+PreviousMonthExpenses previousMonthExpensesFromJson(String str) => PreviousMonthExpenses.fromJson(json.decode(str));
 
-String expensesToJson(Expenses data) => json.encode(data.toJson());
+String previousMonthExpensesToJson(PreviousMonthExpenses data) => json.encode(data.toJson());
 
-class Expenses {
-  List<Expense> expenses;
-  int totalExpenses;
+class PreviousMonthExpenses {
+  List<PreviousMonthExpense> previousMonthExpense;
+  int totalpreviousMonthExpenses;
 
-  Expenses({
-    required this.expenses,
-    required this.totalExpenses,
+  PreviousMonthExpenses({
+    required this.previousMonthExpense,
+    required this.totalpreviousMonthExpenses,
   });
 
-  factory Expenses.fromJson(Map<String, dynamic> json) => Expenses(
-    expenses: List<Expense>.from(json["expenses"].map((x) => Expense.fromJson(x))),
-    totalExpenses: json["totalExpenses"],
+  factory PreviousMonthExpenses.fromJson(Map<String, dynamic> json) => PreviousMonthExpenses(
+    previousMonthExpense: List<PreviousMonthExpense>.from(json["previousMonthExpenses"].map((x) => PreviousMonthExpense.fromJson(x))),
+    totalpreviousMonthExpenses: json["totalpreviousMonthExpenses"],
   );
 
   Map<String, dynamic> toJson() => {
-    "expenses": List<dynamic>.from(expenses.map((x) => x.toJson())),
-    "totalExpenses": totalExpenses,
+    "previousMonthExpenses": List<dynamic>.from(previousMonthExpense.map((x) => x.toJson())),
+    "totalpreviousMonthExpenses": totalpreviousMonthExpenses,
   };
 }
 
-class Expense {
+class PreviousMonthExpense {
   int id;
   int managerId;
   int amount;
@@ -37,7 +37,7 @@ class Expense {
   DateTime createdAt;
   DateTime updatedAt;
 
-  Expense({
+  PreviousMonthExpense({
     required this.id,
     required this.managerId,
     required this.amount,
@@ -47,7 +47,7 @@ class Expense {
     required this.updatedAt,
   });
 
-  factory Expense.fromJson(Map<String, dynamic> json) => Expense(
+  factory PreviousMonthExpense.fromJson(Map<String, dynamic> json) => PreviousMonthExpense(
     id: json["id"],
     managerId: json["manager_id"],
     amount: json["amount"],

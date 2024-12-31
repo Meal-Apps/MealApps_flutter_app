@@ -19,7 +19,7 @@ class LogoutApiService {
         throw Exception("${response.statusCode}  body ${response.body}");
       }
     }catch(e){
-      throw Exception("Logout Failde");
+      throw Exception("Logout Failed");
     }
   }
 }

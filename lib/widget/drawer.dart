@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mill_info/screen/create_user_screen.dart';
 
 import '../api/endpoints.dart';
-import '../api/services/logout-service.dart';
+import '../api/services/logout_service.dart';
 import '../core/shared_value.dart';
 import '../screen/login_screen.dart';
-import '../screen/manager-screen.dart';
-import '../screen/member-screen.dart';
-import '../screen/previous-month-expenses-screen.dart';
+import '../screen/manager_screen.dart';
+import '../screen/member_screen.dart';
+import '../screen/previous_month_expenses_screen.dart';
 
 class Drawer {
  static getDrawer(BuildContext context){
@@ -21,7 +21,7 @@ class Drawer {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const MemberScreen()),);
+                  builder: (context) =>  MemberScreen()),);
           },
           label: const Text(
             "Members",
@@ -39,7 +39,7 @@ class Drawer {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const ManagerScreen()),);
+                  builder: (context) =>  ManagerScreen()),);
           },
           label: const Text(
             "Manager",
@@ -57,7 +57,7 @@ class Drawer {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const PreviousMonthExpensesScreen()));
+                    builder: (context) =>  PreviousMonthExpensesScreen()));
           },
           label: const Text(
             "Previous Month Expenses",
