@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mill_info/core/data_load_from_api.dart';
 import 'package:mill_info/screen/home_screen.dart';
 import 'package:mill_info/screen/login_screen.dart';
 import 'package:shared_value/shared_value.dart';
@@ -19,15 +18,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     token.load();
     isManager.load();
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home:token.$ !=""? HomeScreen():const LoginSignupScreen()
+    if(token.$ !=""){
+      return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home:HomeScreen()
     );
+    }else{
+    return GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: 'Flutter Demo',
+    theme: ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    useMaterial3: true,
+    ),
+    home:LoginSignupScreen()
+    );
+    }
+
   }
 
 

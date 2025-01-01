@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mill_info/screen/create_user_screen.dart';
-
+import 'package:get/get.dart';
 import '../api/endpoints.dart';
 import '../api/services/logout_service.dart';
 import '../core/shared_value.dart';
@@ -84,25 +85,27 @@ class Drawer {
             Icons.person_add_alt_rounded,
             size: 20,
           ),
-        ):const Text(""),
+        ):const SizedBox(height: 0,),
         //logout
         TextButton.icon(
           onPressed: () {
             isManager.load();
             if(isManager.$){
-              LogoutApiService().logout(endpoint: managerLogout);
+              LogoutApiService().logout(endpoint: managerLogout).then((onValue){
+                isManager.$=false;
+                token.$="";
+                Fluttertoast.showToast(msg: "${onValue['message']}");
+              });
             }else{
-              LogoutApiService().logout(endpoint: userLogout);
+              LogoutApiService().logout(endpoint: userLogout).then((onValue){
+                isManager.$=false;
+                token.$="";
+                Fluttertoast.showToast(msg: "${onValue['message']}");
+              });
             }
-            isManager.$=false;
-            token.$="";
             token.load();
             isManager.load();
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const LoginSignupScreen()),
-                    (Route route) => false);
+            Get.offAll(LoginSignupScreen());
           },
           label: const Text(
             "Logout",

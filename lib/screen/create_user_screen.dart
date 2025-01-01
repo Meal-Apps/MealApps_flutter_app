@@ -116,7 +116,7 @@ class _UserCreateScreen extends State<UserCreateScreen> {
                             Fluttertoast.showToast(msg: "$email $password");
                           } else {
                             Get.put(ApiController()).refreshData();
-                            Get.offAll( MemberScreen());
+                            Get.to( MemberScreen());
                             _emailController.clear();
                             _nameController.clear();
                             _passwordController.clear();

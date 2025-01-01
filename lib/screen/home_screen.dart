@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget  {
             child: CircularProgressIndicator(),
           );
         }
-        return getExpenses(context, controller.expenses);
+        return getExpenses(context, controller.expenses,controller.refreshData);
       }),
       bottomSheet: Container(
         color: Colors.lightGreenAccent,
@@ -65,13 +65,13 @@ class HomeScreen extends StatelessWidget  {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text("${ApiController().totalBalance} TK",
+                  Text("${controller.totalBalance} TK",
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold)),
-                  Text(" ${ApiController().totalExpenses}TK",
+                  Text(" ${controller.totalExpenses}TK",
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold)),
-                  Text("${ApiController().currentBalance} TK",
+                  Text("${controller.currentBalance} TK",
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold)),
                 ],

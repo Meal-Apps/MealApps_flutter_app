@@ -9,26 +9,26 @@ PreviousMonthExpenses previousMonthExpensesFromJson(String str) => PreviousMonth
 String previousMonthExpensesToJson(PreviousMonthExpenses data) => json.encode(data.toJson());
 
 class PreviousMonthExpenses {
-  List<PreviousMonthExpense> previousMonthExpense;
-  int totalpreviousMonthExpenses;
+  List<Expense> expenses;
+  int totalExpenses;
 
   PreviousMonthExpenses({
-    required this.previousMonthExpense,
-    required this.totalpreviousMonthExpenses,
+    required this.expenses,
+    required this.totalExpenses,
   });
 
   factory PreviousMonthExpenses.fromJson(Map<String, dynamic> json) => PreviousMonthExpenses(
-    previousMonthExpense: List<PreviousMonthExpense>.from(json["previousMonthExpenses"].map((x) => PreviousMonthExpense.fromJson(x))),
-    totalpreviousMonthExpenses: json["totalpreviousMonthExpenses"],
+    expenses: List<Expense>.from(json["expenses"].map((x) => Expense.fromJson(x))),
+    totalExpenses: json["totalExpenses"],
   );
 
   Map<String, dynamic> toJson() => {
-    "previousMonthExpenses": List<dynamic>.from(previousMonthExpense.map((x) => x.toJson())),
-    "totalpreviousMonthExpenses": totalpreviousMonthExpenses,
+    "expenses": List<dynamic>.from(expenses.map((x) => x.toJson())),
+    "totalExpenses": totalExpenses,
   };
 }
 
-class PreviousMonthExpense {
+class Expense {
   int id;
   int managerId;
   int amount;
@@ -37,7 +37,7 @@ class PreviousMonthExpense {
   DateTime createdAt;
   DateTime updatedAt;
 
-  PreviousMonthExpense({
+  Expense({
     required this.id,
     required this.managerId,
     required this.amount,
@@ -47,7 +47,7 @@ class PreviousMonthExpense {
     required this.updatedAt,
   });
 
-  factory PreviousMonthExpense.fromJson(Map<String, dynamic> json) => PreviousMonthExpense(
+  factory Expense.fromJson(Map<String, dynamic> json) => Expense(
     id: json["id"],
     managerId: json["manager_id"],
     amount: json["amount"],

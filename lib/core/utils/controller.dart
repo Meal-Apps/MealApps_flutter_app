@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:mill_info/api/model_class/for_manager/manager_all_info.dart';
 import 'package:mill_info/api/model_class/for_user/balance_model.dart' as balances;
-import 'package:mill_info/api/model_class/for_user/expanses-model.dart';
-import 'package:mill_info/api/services/previous_month_data.dart';
+import 'package:mill_info/api/model_class/for_user/expanses-model.dart' as previousMonth;
+import 'package:mill_info/api/services/previous_month_data.dart' ;
 
 import '../../api/services/for_manager/manager_all_info.dart';
 // class AllDataController extends GetxController {
@@ -61,7 +61,7 @@ class PreviousMonthBalanceApiController extends GetxController{
 }
 class PreviousMonthExpensesApiController extends GetxController{
   var isLoading = false.obs;
-  var expenses = <PreviousMonthExpense>[].obs;
+  var expenses = <previousMonth.Expense>[].obs;
   var totalExpenses = 0.obs;
   @override
   void onInit(){
@@ -72,8 +72,8 @@ class PreviousMonthExpensesApiController extends GetxController{
     try{
       isLoading(true);
       var response = await getPreviousExpenses();
-      expenses.assignAll(response.previousMonthExpense);
-      totalExpenses(response.totalpreviousMonthExpenses );
+      expenses.assignAll(response.expenses);
+      totalExpenses(response.totalExpenses );
     }finally{
       isLoading(false);
     }

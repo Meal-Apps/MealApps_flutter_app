@@ -4,13 +4,14 @@ import 'package:get/get.dart';
 import 'package:mill_info/api/endpoints.dart';
 import 'package:mill_info/api/services/login_service.dart';
 import 'package:mill_info/core/shared_value.dart';
-import 'package:mill_info/main.dart';
+import 'package:mill_info/screen/home_screen.dart';
 import 'package:mill_info/screen/singup_screen.dart';
 
 import '../core/utils/email_validation.dart';
 
 class LoginSignupScreen extends StatefulWidget {
-  const LoginSignupScreen({super.key});
+  String? email;
+   LoginSignupScreen({super.key,this.email});
   @override
   State<LoginSignupScreen> createState() => _LoginSignupScreenState();
 }
@@ -19,8 +20,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool isULoading = false,isMLoading=false;
+
   @override
   Widget build(BuildContext context) {
+    if(widget.email !=null){
+      _emailController.text = widget.email!;
+    }
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(),
@@ -31,7 +37,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
                   "Login our MealApp",
@@ -79,9 +84,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
+                    isULoading? const CircularProgressIndicator() :  ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
+                           isULoading = true ;
+                           setState(() {});
+                          FocusScope.of(context).unfocus();
                           await LoginApiService()
                               .login(_emailController.text,
                                   _passwordController.text,
@@ -91,18 +99,26 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             isManager.$ = false;
                             isManager.load();
                             token.load();
+                            isULoading = false ;
+                            setState(() {});
+
                             Fluttertoast.showToast(msg: "Login successfully");
-                            Get.offAll(const MyApp());
+                            Get.offAll(() =>  HomeScreen());
                           }).catchError((e) {
+                            isULoading = false ;
+                            setState(() {});
                             Fluttertoast.showToast(msg: "error:  $e");
                           });
                         }
                       },
                       child: const Text('Login as user'),
                     ),
-                    ElevatedButton(
+                    isMLoading? const CircularProgressIndicator() : ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
+                          isMLoading = true ;
+                          setState(() {});
+                          FocusScope.of(context).unfocus();
                           await LoginApiService()
                               .login(_emailController.text,
                                   _passwordController.text,
@@ -112,11 +128,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             isManager.$ = true;
                             isManager.load();
                             token.load();
-                            // print("this is token : ${token.$}");
+                            isMLoading = false ;
+                            setState(() {});
                             Fluttertoast.showToast(msg: "${value['message']}");
-                            Get.offAll(() => const MyApp());
+                            Get.offAll(() =>  HomeScreen());
                           }).catchError((e) {
-                            Fluttertoast.showToast(msg: "error: $e");
+                            isMLoading = false ;
+                            setState(() {});
+                            Fluttertoast.showToast(msg: "$e");
                           });
                         }
                       },

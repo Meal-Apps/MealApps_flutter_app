@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mill_info/core/utils/controller.dart';
 import '../core/utils/screen_size.dart';
 
-Widget getExpenses(BuildContext context,expenses){
+Widget getExpenses(BuildContext context,expenses,refreshMethod){
   if(expenses!=null){
     return RefreshIndicator(
-      onRefresh: ApiController().refreshData,
+      onRefresh: refreshMethod,
       child: Column(
         children: [
           const Row(

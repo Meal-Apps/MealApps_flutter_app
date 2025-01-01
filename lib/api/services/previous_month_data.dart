@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:mill_info/api/model_class/for_user/balance_model.dart';
 import 'package:mill_info/api/model_class/for_user/expanses-model.dart';
-
 import '../../core/shared_value.dart';
 import '../endpoints.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +13,6 @@ Future<Balance> getPreviousBalance() async{
   );
   if (response.statusCode == 200) {
     var data =balanceFromJson(response.body);
-    print(data);
     return data;
 
   } else {

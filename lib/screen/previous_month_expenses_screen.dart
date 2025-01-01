@@ -11,7 +11,12 @@ class PreviousMonthExpensesScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Previous month expenses"),
       ),
-      body:getExpenses(context, expenses.expenses),
+      body:Obx((){
+        if(expenses.isLoading.value){
+          return const Center(child: CircularProgressIndicator(),);
+        }
+        return getExpenses(context, expenses.expenses,expenses.refreshData);
+      }),
       bottomSheet: Container(
         color: Colors.lightGreenAccent,
         height: 62,

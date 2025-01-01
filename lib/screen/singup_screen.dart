@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -112,6 +111,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 isLoading?const CircularProgressIndicator():ElevatedButton(
                   onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        FocusScope.of(context).unfocus();
                         isLoading =true;
                         setState(() {});
                         var user = RegApiService().registration(_emailController.text, _passwordController.text, _nameController.text, _mealNameController.text);
@@ -121,19 +121,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           });
                           if(onValue['message']=="success"){
                             Fluttertoast.showToast(msg: onValue[ 'message'].toString());
-                            Get.offAll(()=> const LoginSignupScreen());
-                            if (kDebugMode) {
-                              print("error not null : $onValue");
-                            }
+                            Get.offAll(()=>  LoginSignupScreen(email: onValue['manager']['email'],));
                           }else{
                             isLoading=false;
                             setState(() {});
                             onValue['message'].forEach((key, value) {
                               Fluttertoast.showToast(msg: "$key : ${value[0]}");
                             });
-                            if (kDebugMode) {
-                              print("error :  ${onValue['message']}");
-                            }
                           }
                         });
 
