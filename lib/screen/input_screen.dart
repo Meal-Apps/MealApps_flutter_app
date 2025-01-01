@@ -168,9 +168,6 @@ class _AddDataState extends State<AddData> {
                                   Fluttertoast.showToast(msg: onValue['message']);
 
                                   Get.to(() => BalanceView());
-                                  if (kDebugMode) {
-                                    print("tis is d $onValue");
-                                  }
                                   inputName.clear();
                                   inputBalance.clear();
                                   inputID.clear();

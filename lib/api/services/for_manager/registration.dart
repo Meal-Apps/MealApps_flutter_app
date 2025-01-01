@@ -14,9 +14,6 @@ class RegApiService {
        'meal_name':mealName,
        'password':password
      }));
-     print(response.body);
-     print(response.statusCode);
-
      return jsonDecode(response.body);
    }catch(e){
      if(e is FormatException){

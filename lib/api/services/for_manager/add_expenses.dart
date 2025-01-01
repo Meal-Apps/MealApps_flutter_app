@@ -20,14 +20,10 @@ class AddExpensesApiService {
             "date": date
           }
       ));
-      print(response.body);
-      print(response.statusCode);
-
       return jsonDecode(response.body);
     }catch(e){
       if(e is FormatException){
         return {'error':e.toString()};
-
       }
       return{'error':"Unknown Error"};
     }

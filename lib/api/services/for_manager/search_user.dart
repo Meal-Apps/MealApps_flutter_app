@@ -12,16 +12,12 @@ class UserSearch{
           'Authorization': 'Bearer ${token.$}'
         }
     );
-    print(token.$);
-    print(response.body);
+
     if (response.statusCode == 200) {
       var data = searchUserFromJson(response.body);
       return data;
-      // final  data = jsonDecode(response.body);
-      // return data.map((item) => ManagerAllInfo.fromJson(item)).toList();
     } else {
-      print('Failed to load data');
-      throw Exception("dfd");
+      throw Exception('Failed to load data');
     }
   }
 }
