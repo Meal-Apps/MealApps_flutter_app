@@ -10,7 +10,7 @@ class AddBalanceApiService {
       const url = 'https://mealapi.devrefat.com/api/$addBalance'; // Replace with your API URL
       final response = await http.post(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token.$}'
+        'Authorization': 'Bearer ${await getToken()}'
 
       }, body: jsonEncode(
           {

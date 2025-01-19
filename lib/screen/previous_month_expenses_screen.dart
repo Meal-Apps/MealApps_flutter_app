@@ -17,7 +17,7 @@ class PreviousMonthExpensesScreen extends StatelessWidget {
         }
         return getExpenses(context, expenses.expenses,expenses.refreshData);
       }),
-      bottomSheet: Container(
+      bottomSheet: Obx(()=> Container(
         color: Colors.lightGreenAccent,
         height: 62,
         padding: const EdgeInsets.all(10),
@@ -32,7 +32,7 @@ class PreviousMonthExpensesScreen extends StatelessWidget {
                     fontSize: 14, fontWeight: FontWeight.bold)),
           ],
         ),
-      ),
+      ))
 
     );
   }

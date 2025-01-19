@@ -11,7 +11,7 @@ class AddExpensesApiService {
       const url = 'https://mealapi.devrefat.com/api/$addExpenses'; // Replace with your API URL
       final response = await http.post(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token.$}'
+        'Authorization': 'Bearer ${await getToken()}'
 
       }, body: jsonEncode(
           {

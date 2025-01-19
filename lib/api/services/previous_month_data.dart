@@ -8,7 +8,7 @@ Future<Balance> getPreviousBalance() async{
   final response  = await http.get(
       Uri.parse("https://mealapi.devrefat.com/api/$get_previous_balance"),
       headers: {
-        'Authorization':'Bearer ${token.$}'
+        'Authorization':'Bearer ${await getToken()}'
       }
   );
   if (response.statusCode == 200) {
@@ -23,7 +23,7 @@ Future<PreviousMonthExpenses> getPreviousExpenses() async{
   final response  = await http.get(
       Uri.parse("https://mealapi.devrefat.com/api/$get_previous_expenses"),
       headers: {
-        'Authorization':'Bearer ${token.$}'
+        'Authorization':'Bearer ${await getToken()}'
       }
   );
   if (response.statusCode == 200) {

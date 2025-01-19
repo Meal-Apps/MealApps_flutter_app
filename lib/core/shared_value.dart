@@ -1,17 +1,17 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_value/shared_value.dart';
 
-final SharedValue<dynamic> millId = SharedValue(
-  value: "", // initial value
-  key: "millID", // disk storage key for shared_preferences
-  autosave: true, // autosave to shared prefs when value changes
-);
-final SharedValue<dynamic> isManager = SharedValue(
-  value: false, // initial value
-  key: "roll", // disk storage key for shared_preferences
-  autosave: true, // autosave to shared prefs when value changes
-);
-final SharedValue<dynamic> token = SharedValue(
-    value: "",
-    key: "token",
-    autosave: true
-);
+Future<String?> getToken() {
+  return SharedPreferences.getInstance().then((prefs) {
+    return prefs.getString('token');
+  });
+}
+
+Future<bool> getIsManager() {
+  return SharedPreferences.getInstance().then((prefs) {
+    return prefs.getBool('isManager')??false;
+  });
+}
+
+
+

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -164,7 +163,8 @@ class _AddDataState extends State<AddData> {
                               if (formKeyBalance.currentState!.validate()) {
                                 var balance = AddBalanceApiService().balance(inputBalance.text,userId);
                                 balance.then((onValue) {
-                                   Get.put(ApiController()).refreshData();
+                                  FocusScope.of(context).unfocus();
+                                  Get.put(ApiController()).refreshData();
                                   Fluttertoast.showToast(msg: onValue['message']);
 
                                   Get.to(() => BalanceView());
@@ -274,6 +274,7 @@ class _AddDataState extends State<AddData> {
                         date: inputDate.text,
                         des: inputDetails.text);
                     expenses.then((value) {
+                      FocusScope.of(context).unfocus();
                       Get.put(ApiController()).refreshData();
                       inputDetails.clear();
                       inputPrice.clear();

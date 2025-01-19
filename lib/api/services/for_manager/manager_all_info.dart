@@ -9,10 +9,10 @@ class ApiData {
     final response = await http.get(
         Uri.parse("https://mealapi.devrefat.com/api/$get_managers"),
         headers: {
-          'Authorization': 'Bearer ${token.$}'
+          'Authorization': 'Bearer ${await getToken()}'
         }
     );
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       var data = managerAllInfoFromJson(response.body);
       return data;

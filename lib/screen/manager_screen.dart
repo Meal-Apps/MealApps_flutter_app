@@ -34,23 +34,26 @@ class ManagerScreen extends StatelessWidget {
 
           //amount row
           SizedBox(
-            height: screenHeight(context) * 0.8,
+            height: screenHeight(context) * 0.6,
             child: RefreshIndicator(
               onRefresh: ApiController().refreshData,
-              child: ListTile(
-                leading: Text(
-                 manager!.mealName,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children:  [
+                Text(
+                  manager!.mealName,
                   style: const TextStyle(fontSize: 14),
                 ),
-                title: Text(
-                   manager!.name,
+                Text(
+                  manager!.name,
                   textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 14),softWrap: true,
+                ),
+               Text(
+                  manager!.email,
                   style: const TextStyle(fontSize: 14),
                 ),
-                trailing: Text(
-                   manager!.email,
-                  style: const TextStyle(fontSize: 14),
-                ),
+                ]
               ),
             ),
           )

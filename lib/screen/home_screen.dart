@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mill_info/core/utils/controller.dart';
 import 'package:mill_info/screen/balance_screen.dart';
@@ -12,6 +13,7 @@ class HomeScreen extends StatelessWidget  {
     super.key,
   });
   final controller = Get.put(ApiController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,22 +25,30 @@ class HomeScreen extends StatelessWidget  {
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => BalanceView())),
               child: const Text("Balance")),
-          if (isManager.$)
-            IconButton(
-                onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const AddData()),
-                    ),
-                icon: const Icon(Icons.add))
+          FutureBuilder<bool>(future: getIsManager(),
+              builder: (context,snapshot){
+            if(snapshot.data==true){
+              return   IconButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddData()),
+                  ),
+                  icon: const Icon(Icons.add));
+            }else{
+              return const SizedBox();
+            }
+              })
+            
         ],
       ),
-      drawer: drawer.Drawer.getDrawer(context),
+      drawer: drawer.Drawer().getDrawer(context),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
+
         return getExpenses(context, controller.expenses,controller.refreshData);
       }),
       bottomSheet: Container(
