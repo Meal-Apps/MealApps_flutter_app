@@ -10,7 +10,6 @@ class BalanceView extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     List<dynamic> balances = apiController.balance;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -39,31 +38,34 @@ class BalanceView extends StatelessWidget{
         }
           return RefreshIndicator(
             onRefresh: apiController.refreshData,
-            child: ListView.builder(
-                itemCount:balances.length,
-                itemBuilder: (context, index) {
-                  var balance = balances[index];
-                  return Container(
-                    decoration:
-                    const BoxDecoration(border: Border(bottom: BorderSide())),
-                    padding: const EdgeInsets.all(5.0),
-                    child: ListTile(
-                      leading: Text(
-                        DateFormat.yMEd().format(balance.createdAt),
-                        style: const TextStyle(fontSize: 14),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 60),
+              child: ListView.builder(
+                  itemCount:balances.length,
+                  itemBuilder: (context, index) {
+                    var balance = balances[index];
+                    return Container(
+                      decoration:
+                      const BoxDecoration(border: Border(bottom: BorderSide())),
+                      padding: const EdgeInsets.all(5.0),
+                      child: ListTile(
+                        leading: Text(
+                          DateFormat.yMEd().format(balance.createdAt),
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        title: Text(
+                          balance.userName,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        trailing: Text(
+                          " ${balance.balance} TK",
+                          style: const TextStyle(fontSize: 14),
+                        ),
                       ),
-                      title: Text(
-                        balance.userName,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      trailing: Text(
-                        " ${balance.balance} TK",
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+            ),
           );}),
       bottomSheet: Obx(() {
         return Container(
