@@ -12,6 +12,12 @@ Future<bool> getIsManager() {
     return prefs.getBool('isManager')??false;
   });
 }
+late SharedValue<String> token;
 
-
+Future<void> initializeToken() async {
+  token = SharedValue(
+    value: await getToken() ?? '',
+    key: 'token',
+  );
+}
 
