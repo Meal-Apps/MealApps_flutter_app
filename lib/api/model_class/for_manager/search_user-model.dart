@@ -92,7 +92,7 @@ class Datum {
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     name: json["name"],
-    managerId: json["manager_id"],
+    managerId: int.parse(json["manager_id"]),
     email: json["email"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),

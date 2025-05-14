@@ -9,6 +9,8 @@ class BalanceView extends StatelessWidget{
   BalanceView({super.key});
   @override
   Widget build(BuildContext context) {
+
+
     List<dynamic> balances = apiController.balance;
     return Scaffold(
       appBar: AppBar(
@@ -19,13 +21,15 @@ class BalanceView extends StatelessWidget{
               ? TextButton(
               onPressed: () {
                 isPreviousMonth(false);
+                apiController.balance.sort((a,b)=>b.createdAt.compareTo(a.createdAt));
                 balances = apiController.balance;
               },
               child: const Text("Current month"))
               : TextButton(
               onPressed: () {
                 isPreviousMonth(true);
-               balances = controller.balance;
+                controller.balance.sort((a,b)=>b.createdAt.compareTo(a.createdAt));
+                balances = controller.balance;
               },
               child: const Text("Previous month"));
         })
@@ -36,7 +40,8 @@ class BalanceView extends StatelessWidget{
         if(isPreviousMonth.value?controller.isLoading.value:apiController.isLoading.value){
           return const Center( child: CircularProgressIndicator(),);
         }
-          return RefreshIndicator(
+
+        return RefreshIndicator(
             onRefresh: apiController.refreshData,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 60),

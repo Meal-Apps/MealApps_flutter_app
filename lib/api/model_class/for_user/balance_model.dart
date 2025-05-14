@@ -49,9 +49,9 @@ class BalanceElement {
 
   factory BalanceElement.fromJson(Map<String, dynamic> json) => BalanceElement(
     id: json["id"],
-    userId: json["user_id"],
-    managerId: json["manager_id"],
-    balance: json["balance"],
+    userId: int.parse(json["user_id"]),
+    managerId: int.parse(json["manager_id"]),
+    balance: int.parse(json["balance"]),
     userName: json["user_name"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),

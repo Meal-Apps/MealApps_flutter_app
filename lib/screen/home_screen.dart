@@ -48,6 +48,7 @@ class HomeScreen extends StatelessWidget  {
             child: CircularProgressIndicator(),
           );
         }
+        controller.expenses.sort((a,b)=>b.createdAt.compareTo(a.createdAt));
 
         return getExpenses(context, controller.expenses,controller.refreshData);
       }),

@@ -93,6 +93,7 @@ class ApiController extends GetxController{
     fetchData();
     super.onInit();
   }
+
   Future<void> fetchData()async{
     try{
       isLoading(true);
