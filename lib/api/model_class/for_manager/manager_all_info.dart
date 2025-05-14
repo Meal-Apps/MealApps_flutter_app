@@ -50,8 +50,8 @@ class ManagerAllInfo {
 
 class Balance {
   int id;
-  int userId;
-  int managerId;
+  String userId;
+  String managerId;
   int balance;
   String userName;
   DateTime createdAt;
@@ -71,7 +71,7 @@ class Balance {
     id: json["id"],
     userId: json["user_id"],
     managerId: json["manager_id"],
-    balance: json["balance"],
+    balance: int.parse(json["balance"]),
     userName: json["user_name"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
@@ -90,7 +90,7 @@ class Balance {
 
 class Expense {
   int id;
-  int managerId;
+  String managerId;
   int amount;
   String description;
   DateTime date;
@@ -110,7 +110,7 @@ class Expense {
   factory Expense.fromJson(Map<String, dynamic> json) => Expense(
     id: json["id"],
     managerId: json["manager_id"],
-    amount: json["amount"],
+    amount: int.parse(json["amount"]),
     description: json["description"],
     date: DateTime.parse(json["date"]),
     createdAt: DateTime.parse(json["created_at"]),
@@ -159,7 +159,7 @@ class Manager {
 class User {
   int id;
   String name;
-  int managerId;
+  String managerId;
   String email;
   DateTime createdAt;
   DateTime updatedAt;

@@ -30,7 +30,7 @@ class PreviousMonthExpenses {
 
 class Expense {
   int id;
-  int managerId;
+  String managerId;
   int amount;
   String description;
   DateTime date;
@@ -50,7 +50,7 @@ class Expense {
   factory Expense.fromJson(Map<String, dynamic> json) => Expense(
     id: json["id"],
     managerId: json["manager_id"],
-    amount: json["amount"],
+    amount: int.parse(json["amount"]),
     description: json["description"],
     date: DateTime.parse(json["date"]),
     createdAt: DateTime.parse(json["created_at"]),
